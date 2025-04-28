@@ -77,5 +77,11 @@
             class="inline-block mt-6 px-4 py-2 bg-gray-300 hover:bg-gray-400 text-gray-800 rounded font-semibold">
             Kembali ke History Transaksi
         </a>
+        
+        <a href="{{ route('transaksi.downloadStruk', $transaksi->id) }}"
+            class="inline-block mt-4 ml-4 px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded font-semibold">
+            Download Struk PDF
+        </a>
+        
     </div>
 </x-app-layout>

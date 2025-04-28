@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Transaksi;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf; // Tambahkan ini di atas controller kamu
 
 class TransaksiController extends Controller
 {
@@ -12,8 +13,9 @@ class TransaksiController extends Controller
      */
     public function index()
     {
-        $transaksis = Transaksi::with('items.produk')->paginate(10)->map(function ($transaksi) {
+        $transaksis = Transaksi::with('items.produk')->get()->map(function ($transaksi) {
             $transaksi->total_item = $transaksi->items->count();
+
 
             return $transaksi;
         });
@@ -63,12 +65,20 @@ class TransaksiController extends Controller
         //
     }
 
+    public function downloadStruk($id)
+    {
+        $transaksi = Transaksi::with('items.produk')->findOrFail($id);
+
+        $pdf = Pdf::loadView('transaksi.struk-pdf', compact('transaksi'));
+
+        return $pdf->download('struk_transaksi_'.$transaksi->id.'.pdf');
+    }
+
     /**
      * Remove the specified resource from storage.
      */
     public function destroy(Transaksi $transaksi)
     {
-        $transaksi->delete();
-        return redirect()->route('transaksi.index')->with('success', 'Transaksi berhasil dihapus.');
+        //
     }
 }

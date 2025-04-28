@@ -32,7 +32,7 @@ class ProdukController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'nama_produk' => 'required|string|max:255',
+            'nama_produk' => 'required|string|max:255|unique:produks,nama_produk',
             'kategori_id' => 'required|exists:kategoris,id',
             'kuantitas' => 'required|integer|min:0',
             'harga' => 'required|integer|min:0',

@@ -34,6 +34,12 @@
                                         class="px-6 py-3 bg-gray-50 dark:bg-gray-900 text-left text-xs leading-4 font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                                         Tanggal Transaksi
                                     </th>
+
+                                    <th
+                                    class="px-6 py-3 bg-gray-50 dark:bg-gray-900 text-left text-xs leading-4 font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                                    Nama Produk
+                                    </th>
+
                                     <th
                                         class="px-6 py-3 bg-gray-50 dark:bg-gray-900 text-left text-xs leading-4 font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                                         Total Harga
@@ -51,21 +57,23 @@
                             <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
                                 @forelse ($transaksis as $transaksi)
                                     <tr>
-                                        <td
-                                            class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">
                                             {{ $transaksi->created_at }}
                                         </td>
-                                        <td
-                                            class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">
+                            
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">
+                                            @foreach ($transaksi->items as $item)
+                                                {{ $item->produk->nama_produk }}@if(!$loop->last), @endif
+                                            @endforeach
+                                        </td>
+                                    
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">
                                             Rp{{ number_format($transaksi->total_harga, 0, ',', '.') }}
                                         </td>
-                                        <td
-                                            class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">
                                             {{ $transaksi->total_item }}
                                         </td>
-                                        <td
-                                            class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300 flex items-center space-x-3">
-
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300 flex items-center space-x-3">
                                             <a href="{{ route('transaksi.show', $transaksi) }}"
                                                 class="text-white-700 hover:text-white-900 mr-2" title="Lihat">
                                                 <!-- Eye icon -->
@@ -78,33 +86,18 @@
                                                         d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                                                 </svg>
                                             </a>
-
-                                            <form action="{{ route('transaksi.destroy', $transaksi) }}" method="POST"
-                                                onsubmit="return confirm('Yakin ingin menghapus?')" class="inline">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="button" onclick="openDeleteModal({{ $transaksi->id }})"
-                                                    class="text-red-600 hover:text-red-900" title="Hapus">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5"
-                                                        fill="none" viewBox="0 0 24 24" stroke="currentColor"
-                                                        stroke-width="2">
-                                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                                            d="M19 7L5 7M6 7l1 12a2 2 0 002 2h6a2 2 0 002-2l1-12M10 11v6M14 11v6M9 7V4a1 1 0 011-1h4a1 1 0 011 1v3" />
-                                                    </svg>
-                                                </button>
-                                            </form>
                                         </td>
-
                                     </tr>
                                 @empty
                                     <tr>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300"
-                                            colspan="2">
+                                            colspan="5">
                                             Belum ada data transaksi.
                                         </td>
                                     </tr>
                                 @endforelse
                             </tbody>
+                            
                         </table>
                     </div>
                 </div>
@@ -116,7 +109,7 @@
     <div id="deleteModal" class="fixed inset-0 bg-black bg-opacity-50 items-center justify-center hidden z-50">
         <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg max-w-sm w-full p-6">
             <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">Konfirmasi Hapus</h3>
-            <p class="mb-6 text-gray-700 dark:text-gray-300">Apakah Anda yakin ingin menghapus transaksi ini?</p>
+            <p class="mb-6 text-gray-700 dark:text-gray-300">Apakah Anda yakin ingin menghapus produk ini?</p>
 
             <form id="deleteForm" method="POST" action="">
                 @csrf
@@ -137,10 +130,10 @@
 
     {{-- Script JavaScript --}}
     <script>
-        function openDeleteModal(transaksiId) {
+        function openDeleteModal(produkId) {
             const modal = document.getElementById('deleteModal');
             const form = document.getElementById('deleteForm');
-            form.action = `/transaksi/${transaksiId}`;
+            form.action = `/produk/${produkId}`;
             modal.classList.remove('hidden');
             modal.classList.add('flex');
         }

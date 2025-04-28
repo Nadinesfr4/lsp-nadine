@@ -69,7 +69,8 @@
                     <a href="{{ route('produk.index') }}"
                         class="px-4 py-2 rounded bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold">Batal</a>
                     <button type="submit"
-                        class="px-4 py-2 rounded bg-green-600 hover:bg-green-700 text-white font-semibold">Simpan</button>
+                        class="px-4 py-2 rounded bg-gradient-to-r from-indigo-600 to-purple-700
+                        text-white font-semibold">Simpan</button>
                 </div>
             </form>
         </div>
